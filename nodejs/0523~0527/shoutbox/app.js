@@ -5,12 +5,19 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-
 var register= require('./routes/register');
-var message= require('./lib/message');
+var entries= require('./routes/entries');
 var login= require('./routes/login');
+var api= require('./routes/api');
+var error= require('./routes/error');
+
 var user= require('./lib/middleware/user');
+var validate= require('./lib/middleware/validate');
+var page= require('./lib/middleware/page');
+
+var message= require('./lib/message');
+var Entry= require('./lib/entry');
+
 
 var app = express();
 
@@ -27,10 +34,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.session());
+app.use('/api', api.auth);
 app.use(user);
 app.use(message);
 
-app.use('/', index);
 app.get('/register', register.form);
 app.post('/register', register.submit);
 
@@ -38,23 +45,19 @@ app.get('/login', login.form);
 app.post('/login', login.submit);
 app.get('/logout', login.logout);
 
+//app.get('/', entries.list);
+app.get('/'
+			, page(Entry.count, 5) 
+			, entries.list);
+app.get('/post', entries.form);
+//app.post('/post', entries.submit); 유연한 검증 미들웨어를 추가 해보자.
+app.post('/post'
+			, validate.required('entry[title]')
+			, validate.lengthAbove('entry[title]', 4)
+			, entries.submit);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+app.get('/api/user/:id', api.user);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(error.notfound);
+app.use(error.error);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
