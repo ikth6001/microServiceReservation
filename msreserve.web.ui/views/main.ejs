@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title><%= __('title.site') %></title>
+	<link rel='stylesheet' href='/stylesheets/main.css' />
+</head>
+<body>
+	<div id="container" style="border: solid 1px gray;">
+		<div id="areaGnb">
+			<div id="areaBtnToMain" style="display: inline-block;  cursor: pointer;">
+				<img src="img/mainLog.png" align="middle" style="margin: 5px;"> <%= __('logo.main') %>
+			</div>
+			<div id="areaBtnReservInfo" style="display: inline-block; float: right; margin: 5px;">
+				<div style="display: inline-block;">
+					<a href= "/reservationList"><c:out value="${userName}"/></a>
+					<a href= "<c:out value="${loginReqUrl}"/>"><c:out value="${logInOut}"/></a> 
+				</div>
+			</div>
+		</div>
+		<div id="areaPromotion" style="vertical-align: top; height: 200px; width: 600px; overflow: hidden;"></div>
+		<div id="areaCategory">
+			<div class="categoryBtn" categoryId="0" style="display: inline-block; margin-left: 20px; margin-right: 20px; font-weight: bold; cursor: pointer;">
+				<spring:message code="category.all"/>
+			</div>
+		</div>
+		<div id="areaCount" style="text-align: center; margin-bottom: 15px;">
+			<c:out value="${productCountMessage}"></c:out>
+		</div>
+		<div id="areaProductList">
+			<div class="areaProduct" id="productLeft"></div>
+			<div class="areaProduct" id="productRight"></div>
+		</div>
+		<div id="areaBtnMore" style="text-align: center;">
+			<spring:message code="btn.more"/>
+		</div>
+		<div id="areaBtnToTop" style="text-align: center;">
+			^ TOP
+		</div>
+		
+	</div>
+	
+	<script id="promotionTemplate" type="text/template">
+		<div class="promotionItem" style="position: relative; display: inline;">
+			<img src="{{path}}" width="600" height="200">
+		</div>
+	</script>
+	
+	<script id="categoryTemplate" type="text/template">
+		<div class="categoryBtn" categoryId="{{categoryId}}" style="display: inline-block; margin-left: 20px; margin-right: 20px; font-weight: bold; cursor: pointer;">
+			{{name}}
+		</div>
+	</script>
+	
+	<script id="productTemplate" type="text/template">
+		<img src="{{path}}" height="350" width="280"><br>
+		<b>{{name}}</b><br>
+		{{place}}<br>
+		{{description}}
+	</script>
+	
+	<script id="label.product.count" type="text/message">
+		<spring:message code="label.product.count"/>
+	</script>
+	
+	<script type='text/javascript' src='js/handlebars-v4.1.0.js'></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

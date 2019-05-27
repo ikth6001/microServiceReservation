@@ -1,0 +1,49 @@
+#container {
+	height: 100%;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#areaGnb {
+	background-color: #F1F6F2;
+	font-weight: bold;
+}
+
+#areaCategory {
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#areaProductList {
+	background-color: #F1F6F2;
+	margin-bottom: 15px;
+}
+
+#areaBtnMore {
+	margin-bottom: 15px;
+	cursor: pointer;
+}
+
+#areaBtnToTop {
+	margin-bottom: 15px;
+	cursor: pointer;
+}
+
+/* .categoryBtn {
+			display: inline-block;
+			margin-left: 20px;
+			margin-right: 20px;
+			font-weight: bold;
+			cursor: pointer;
+		} */
+.areaProduct {
+	display: inline-block;
+	width: 49%;
+}
+
+.areaProduct>div {
+	text-align: center;
+	margin: 10px;
+}
