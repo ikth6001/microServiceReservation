@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: zuul-proxy-server
+
+server:
+  port: 8080
+  
+zuul:
+  routes:
+    web-service: /web/**
+    reservation-service: /api/reserve/**
+    authorization-service: /api/auth/**

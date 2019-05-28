@@ -9,6 +9,7 @@
     "express": "3.2.6",
     "ejs": "*",
     "i18n": "0.8.3",
-    "cookie-parser": "~1.4.3"
+    "cookie-parser": "~1.4.3",
+    "eureka-nodejs-client": "1.0.7"
   }
 }

@@ -6,7 +6,8 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , cookieParser = require('cookie-parser')
-  , i18n= require('i18n');
+  , i18n= require('i18n')
+  , Eureka= require('eureka-nodejs-client');
 
 /**
  * Module routes.
@@ -14,6 +15,11 @@ var express = require('express')
 var main= require('./routes/main');
 
 var app = express();
+
+//all environments
+app.set('port', process.env.PORT || 8763);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
 i18n.configure({
 	locales: ['en', 'ko']
@@ -23,14 +29,25 @@ i18n.configure({
 	, queryParameter: 'lang'
 });
 
-app.configure(function() {
-	app.use(i18n.init);
+/**
+ * TODO Spring-config server..
+ */
+var eurekaClient= new Eureka({
+	eureka: {
+		host: 'http://127.0.0.1:8761'
+		, registerWithEureka: true
+	},
+	instance: {
+		app: 'web-service'
+		, ipAddr: '127.0.0.1'
+		, port: app.get('port')
+	}
 });
 
-// all environments
-app.set('port', process.env.PORT || 8080);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.configure(function() {
+	eurekaClient.start();
+	app.use(i18n.init);
+});
 
 app.use(cookieParser());
 app.use(i18n);
