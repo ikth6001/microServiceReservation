@@ -1,0 +1,11 @@
+# TODO spring config server / programmatically config
+
+spring:
+  application:
+    name: reservation-service
+  cloud:
+    config:
+      uri: http://localhost:8760
+    
+server:
+  port: 8762

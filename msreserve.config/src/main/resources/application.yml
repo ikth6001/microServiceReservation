@@ -1,3 +1,6 @@
+server:
+  port: 8760
+
 spring:
   cloud:
     config:
