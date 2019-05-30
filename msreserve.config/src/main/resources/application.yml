@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ikth6001/microServiceReservation.git
+          username: 
+          password: 
