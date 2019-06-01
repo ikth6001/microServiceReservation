@@ -6,14 +6,17 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , cookieParser = require('cookie-parser')
-  , i18n= require('i18n')
-  , Eureka= require('eureka-nodejs-client');
+  , Eureka= require('eureka-nodejs-client')
+  , localeMgr= require('./lib/localeMgr')
+  , configMgr= require('./lib/configMgr');
 
 /**
  * Module routes.
  */
 var main= require('./routes/main');
-
+var config;
+var i18n= localeMgr.load();
+var config= configMgr.load('reservation-service', 'http://localhost:8760', 'dev', function(data) { config= data; });
 var app = express();
 
 //all environments
@@ -21,16 +24,10 @@ app.set('port', process.env.PORT || 8763);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-i18n.configure({
-	locales: ['en', 'ko']
-	, directory: __dirname + '/messages'
-	, defaultLocale: 'ko'
-	, cookie: 'lang'
-	, queryParameter: 'lang'
-});
-
 /**
- * TODO Spring-config server..
+ * TODO 
+ * 1. Spring-config server..
+ * 2. 전체적으로 spring config server로부터 데이터를 받은 후에 서버 initializing이 되도록 리팩토링 필요.
  */
 var eurekaClient= new Eureka({
 	eureka: {

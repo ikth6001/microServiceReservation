@@ -1,0 +1,7 @@
+spring.cloud.config.name: web-service
+service:
+   name: web-service
+---
+profiles: dev
+service:
+   name: web-dev-service
