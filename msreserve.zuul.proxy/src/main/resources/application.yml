@@ -1,3 +1,8 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
 spring:
   application:
     name: zuul-proxy-server
@@ -10,4 +15,4 @@ zuul:
   routes:
     reservation-service: /api/reserve/**
     authorization-service: /api/auth/**
-    web-service: /**
+    web-service: /web/**
