@@ -16,3 +16,13 @@ zuul:
     reservation-service: /api/reserve/**
     authorization-service: /api/auth/**
     web-service: /web/**
+#   zuul-proxy-server: /auth/** # temp : 자기 자신에게 하면 무한 루프~
+
+security:
+  oauth2:
+    client:
+      client-id: foo
+      client-secret: bar
+    resource:
+#      token-info-uri: http://oauth2-service/oauth/check_token
+      token-info-uri: http://localhost:8763/oauth/check_token

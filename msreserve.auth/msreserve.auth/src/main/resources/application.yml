@@ -1,0 +1,20 @@
+## TODO : UserDetails, User Service implementation  
+spring:
+  security:
+    user:
+      name: user
+      password: user
+      
+security:
+  oauth2:
+    client:
+      client-id: foo
+      client-secret: bar
+    authorization:
+      check-token-access: isAuthenticated()
+      
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      
