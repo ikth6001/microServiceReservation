@@ -1,9 +1,16 @@
 package com.ikth.apps.msreserve.auth.config;
 
-//@Configuration
-//@EnableAuthorizationServer
-//public class OAuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
-//
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+@Configuration
+@EnableAuthorizationServer
+public class OAuthServerConfiguration { // extends AuthorizationServerConfigurerAdapter {
+
 //	@Override
 //	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 //		super.configure(endpoints);
@@ -11,7 +18,6 @@ package com.ikth.apps.msreserve.auth.config;
 //	
 //	@Override
 //	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-//		// TODO Auto-generated method stub
 //		super.configure(security);
 //	}
 //	
@@ -19,9 +25,14 @@ package com.ikth.apps.msreserve.auth.config;
 //	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 //		super.configure(clients);
 //	}
-//	
-//	@Bean
-//	public TokenStore jdbcTokenStore(DataSource dataSource) {
-//		return new JdbcTokenStore(dataSource);
-//	}
-//}
+	
+	@Bean
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(accessTokenConverter());
+	}
+	
+	@Bean
+	public JwtAccessTokenConverter accessTokenConverter() {
+		return new JwtAccessTokenConverter();
+	}
+}

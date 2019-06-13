@@ -3,7 +3,6 @@ package com.ikth.apps.msreserve.zuul.proxy;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Base64;
@@ -39,7 +38,6 @@ public class ResourceServerTestCase {
 	@Autowired
 	private FilterChainProxy securityProxy;
 	
-	private String CONTENT_TYPE = "application/json;charset=UTF-8";;
     private String SCOPE = "read";
     private String CLIENT_ID = "foo";
     private String CLIENT_SECRET = "bar";
@@ -59,21 +57,39 @@ public class ResourceServerTestCase {
 	
 	@Test
     public void auth_success() throws Exception {
-        mockMvc.perform(get("/auth")
-               .header("Authorization", "Bearer " + getToken())
-               .accept(CONTENT_TYPE))
-               .andExpect(status().isOk())
-               .andExpect(content().contentType(CONTENT_TYPE));
-    }
+		
+		String token= getToken();
+		
+		RestTemplate restTemplate= new RestTemplate();
+        final String url= "http://localhost:8080/auth";
+        
+        HttpHeaders headers= new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);
+		headers.set("Authorization", "Bearer " + token);
+		
+		HttpEntity<?> entity= new HttpEntity<>(headers);
+		ResponseEntity<String> res= restTemplate.exchange(url, HttpMethod.GET, entity, String.class, new Object[] {});
+		
+		String resultString= res.getBody();
+		System.out.println("######################################################################");
+		System.out.println(resultString);
+		System.out.println("######################################################################");
+
+//      mockMvc.perform(get("/auth")
+//      .header("Authorization", "Bearer " + token)
+//      .accept(CONTENT_TYPE))
+//      .andExpect(status().isOk())
+//      .andExpect(content().contentType(CONTENT_TYPE));	
+	}
 
 	private String getToken() throws Exception {
 		
 		RestTemplate restTemplate= new RestTemplate();
-		final String url= "http://localhost:8763/oauth/token?grant_type=password&client_id=foo&username=user&password=user&scope=read";
+		final String url= "http://localhost:8763/oauth/token?grant_type=password&client_id=" + CLIENT_ID + "&username=" + SECURITY_USERNAME + "&password=" + SECURITY_PASSWORD + "&scope=" + SCOPE;
 		
 		HttpHeaders headers= new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-		byte[] encodedUser= Base64.getEncoder().encode("foo:bar".getBytes());
+		byte[] encodedUser= Base64.getEncoder().encode((CLIENT_ID + ":" + CLIENT_SECRET).getBytes());
 		headers.set("Authorization", "Basic " + new String(encodedUser));
 		
 		HttpEntity<?> entity= new HttpEntity<>(headers);
