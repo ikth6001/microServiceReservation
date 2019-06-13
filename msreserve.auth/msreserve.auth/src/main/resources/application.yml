@@ -19,3 +19,9 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
       
+server:
+  tomcat:
+    accesslog:
+      pattern: log>%{yyyy-MM-dd HH:mm:ss}t\t%s\t%r\t%{User-Agent}i\t%{Referer}i\t%a\t%b   
+      enabled: true
+    basedir: .
