@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,8 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OAuthApplicationTestCase {
+	
+	private Logger logger= LoggerFactory.getLogger(OAuthApplicationTestCase.class);
 	
 	private MockMvc mockMvc;
 	
@@ -66,6 +70,6 @@ public class OAuthApplicationTestCase {
         String resultString = result.andReturn().getResponse().getContentAsString();
 
         JacksonJsonParser jsonParser = new JacksonJsonParser();
-        System.out.println(jsonParser.parseMap(resultString).toString());
+        logger.debug(jsonParser.parseMap(resultString).toString());
 	}
 }

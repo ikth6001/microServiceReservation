@@ -1,27 +1,24 @@
-## TODO : UserDetails, User Service implementation  
+# TODO : UserDetails, User Service implementation  
 spring:
   security:
     user:
       name: user
       password: user
       
-security:
-  oauth2:
-    authorization:
-      check-token-access: isAuthenticated()
-      token-key-access: isAuthenticated()
-    client:
-      client-id: foo
-      client-secret: bar
+# security:
+#   oauth2:
+#     authorization:
+#       check-token-access: isAuthenticated()
+#       token-key-access: isAuthenticated()
       
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
       
-server:
-  tomcat:
-    accesslog:
-      pattern: log>%{yyyy-MM-dd HH:mm:ss}t\t%s\t%r\t%{User-Agent}i\t%{Referer}i\t%a\t%b   
-      enabled: true
-    basedir: .
+# server:
+#   tomcat:
+#     accesslog:
+#       pattern: %{yyyy-MM-dd HH:mm:ss}t\t%s\t%r\t%{User-Agent}i\t%{Referer}i\t%a\t%b   
+#       enabled: true
+#     basedir: .
