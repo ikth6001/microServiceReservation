@@ -1,5 +1,6 @@
 package com.ikth.apps.msreserve.auth;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class OAuth2Application {
 
+	@Value("${security.oauth2.resource.jwt.key-value}")
+	private String accessKey;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(OAuth2Application.class, args);
 	}
@@ -23,6 +27,8 @@ public class OAuth2Application {
 	
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
-		return new JwtAccessTokenConverter();
+		JwtAccessTokenConverter tokenConverter= new JwtAccessTokenConverter();
+		tokenConverter.setSigningKey(accessKey);
+		return tokenConverter;
 	}
 }

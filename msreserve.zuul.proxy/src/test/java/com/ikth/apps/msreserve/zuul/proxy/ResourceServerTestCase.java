@@ -4,6 +4,7 @@ package com.ikth.apps.msreserve.zuul.proxy;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.util.Base64;
 import java.util.Map;
@@ -60,26 +61,26 @@ public class ResourceServerTestCase {
 		
 		String token= getToken();
 		
-		RestTemplate restTemplate= new RestTemplate();
-        final String url= "http://localhost:8080/auth";
-        
-        HttpHeaders headers= new HttpHeaders();
-		headers.setContentType(MediaType.TEXT_PLAIN);
-		headers.set("Authorization", "Bearer " + token);
-		
-		HttpEntity<?> entity= new HttpEntity<>(headers);
-		ResponseEntity<String> res= restTemplate.exchange(url, HttpMethod.GET, entity, String.class, new Object[] {});
-		
-		String resultString= res.getBody();
-		System.out.println("######################################################################");
-		System.out.println(resultString);
-		System.out.println("######################################################################");
+//		RestTemplate restTemplate= new RestTemplate();
+//        final String url= "http://localhost:8080/auth";
+//        
+//        HttpHeaders headers= new HttpHeaders();
+//		headers.setContentType(MediaType.TEXT_PLAIN);
+//		headers.set("Authorization", "Bearer " + token);
+//		
+//		HttpEntity<?> entity= new HttpEntity<>(headers);
+//		ResponseEntity<String> res= restTemplate.exchange(url, HttpMethod.GET, entity, String.class, new Object[] {});
+//		
+//		String resultString= res.getBody();
+//		System.out.println("######################################################################");
+//		System.out.println(resultString);
+//		System.out.println("######################################################################");
 
-//      mockMvc.perform(get("/auth")
-//      .header("Authorization", "Bearer " + token)
-//      .accept(CONTENT_TYPE))
-//      .andExpect(status().isOk())
-//      .andExpect(content().contentType(CONTENT_TYPE));	
+      mockMvc.perform(get("/auth")
+      .header("Authorization", "Bearer " + token)
+      .accept(MediaType.APPLICATION_JSON_UTF8))
+      .andExpect(status().isOk())
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 	}
 
 	private String getToken() throws Exception {

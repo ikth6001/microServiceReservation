@@ -9,14 +9,6 @@ spring:
 
 server:
   port: 8080
-  
-  
-zuul:
-  routes:
-    reservation-service: /api/reserve/**
-    authorization-service: /api/auth/**
-    web-service: /web/**
-#   zuul-proxy-server: /auth/** # temp : 자기 자신에게 하면 무한 루프~
 
 security:
   oauth2:
@@ -24,7 +16,13 @@ security:
       client-id: foo
       client-secret: bar
     resource:
-#      token-info-uri: http://oauth2-service/oauth/check_token
-      token-info-uri: http://localhost:8763/oauth/check_token
       jwt:
-        key-uri: http://localhost:8763/oauth/token_key
+        key-value: com.ikth.apps # 나중에 방법 찾아보자.. 일단은 key-value 프로퍼티 사용(config server)
+#      token-info-uri: http://oauth2-service/oauth/check_token : 제대로 지원 안됨. 처리하려면 복잡함..
+#      token-info-uri: http://localhost:8080/api/auth/oauth/check_token 필요 없음
+  
+zuul:
+  routes:
+    reservation-service: /api/reserve/**
+    authorization-service: /api/auth/**
+    web-service: /web/**
