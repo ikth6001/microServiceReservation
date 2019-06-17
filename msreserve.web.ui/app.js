@@ -16,7 +16,7 @@ var express = require('express')
 var main= require('./routes/main');
 var config;
 var i18n= localeMgr.load();
-var config= configMgr.load('reservation-service', 'http://localhost:8760', 'dev', function(data) { config= data; });
+var config= configMgr.load('web-service', 'http://localhost:8760', process.env.NODE_ENV || 'dev', function(data) { config= data; });
 var app = express();
 
 //all environments
