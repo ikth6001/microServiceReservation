@@ -1,0 +1,22 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8080
+
+security:
+  oauth2:
+    client:
+      client-id: foo
+      client-secret: bar
+    resource:
+      jwt:
+        key-value: com.ikth.apps
+  
+zuul:
+  routes:
+    reservation-service: /api/reserve/**
+    authorization-service: /api/auth/**
+    web-service: /web/**
