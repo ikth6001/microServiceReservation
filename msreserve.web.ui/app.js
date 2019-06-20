@@ -20,7 +20,7 @@ var config= configMgr.load('web-service', 'http://localhost:8760', process.env.N
 var app = express();
 
 //all environments
-app.set('port', process.env.PORT || 8763);
+app.set('port', process.env.PORT || 8764);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
