@@ -3,38 +3,29 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
     <springProfile name="dev">
-        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        	<encoder>
+        		<pattern>[%-5level][%d{MM-dd hh:mm:ss}][%c{20}][%L] : %message%n</pattern>
+        	</encoder>
+        </appender>
+        
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        	<file>logs/reserve-server.log</file> <!-- TODO : docker와 같은 container에 올라갈 때 환경변수 같은 방법을 적용할 수 있어야 함.. -->
+        	
+        	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        		<fileNamePattern>reserve-server-%d{yyyy-MM-dd}.log</fileNamePattern>
+        		<maxHistory>7</maxHistory>
+      			<totalSizeCap>1GB</totalSizeCap>
+        	</rollingPolicy>
+        	
+        	<encoder>
+        		<pattern>[%-5level][%d{MM-dd hh:mm:ss}][%c{20}][%L] : %message%n</pattern>
+        	</encoder>
+        </appender>
 
         <root level="DEBUG">
             <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </root>
     </springProfile>
-
-    <springProfile name="prod">
-
-        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>app.log</file>
-
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-                <!-- each archived file, size max 10MB -->
-                <maxFileSize>10MB</maxFileSize>
-                <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
-                <totalSizeCap>20GB</totalSizeCap>
-                <!-- 60 days to keep -->
-                <maxHistory>60</maxHistory>
-            </rollingPolicy>
-
-            <encoder>
-                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
-            </encoder>
-        </appender>
-
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="com.mkyong" level="DEBUG"/>
-        <root level="ERROR">
-            <appender-ref ref="FILE-ROLLING"/>
-        </root>
-    </springProfile>
-
 </configuration>
