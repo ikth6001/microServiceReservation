@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+   config-server:
+      image: msreserve.config 
+      ports:
+         - "8760:8760"
+   eureka-server:
+      image: msreserve.eureka
+      ports:
+         - "8761:8761"
