@@ -2,10 +2,20 @@ version: '3'
 
 services:
    config-server:
-      image: msreserve.config 
+      image: msreserve.config
       ports:
          - "8760:8760"
+      volumes:
+         - //c/docker/msreserve.config/target:/app
+      command: java -Dspring.profiles.active=dev -jar /app/msreserve.config-0.0.1-SNAPSHOT.jar
    eureka-server:
       image: msreserve.eureka
       ports:
          - "8761:8761"
+      volumes:
+         - //c/docker/msreserve.eureka/target:/app
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 config-server:8760
+         && java -Dspring.profiles.active=dev -jar /app/msreserve.eureka-0.0.1-SNAPSHOT.jar"

@@ -10,7 +10,7 @@
         </appender>
         
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        	<file>logs/config-server.log</file> <!-- TODO : docker와 같은 container에 올라갈 때 환경변수 같은 방법을 적용할 수 있어야 함.. -->
+        	<file>/app/logs/config-server.log</file> <!-- TODO : docker와 같은 container에 올라갈 때 환경변수 같은 방법을 적용할 수 있어야 함.. -->
         	
         	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
         		<fileNamePattern>config-server-%d{yyyy-MM-dd}.log</fileNamePattern>
