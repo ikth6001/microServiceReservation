@@ -23,6 +23,9 @@
 	<modules>
 		<module>../msreserve.config</module>
 		<module>../msreserve.eureka</module>
+		<module>../msreserve.auth</module>
+		<module>../msreserve.reservation</module>
+		<module>../msreserve.zuul.proxy</module>
 	</modules>
 
 	<dependencyManagement>

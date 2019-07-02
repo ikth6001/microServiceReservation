@@ -10,3 +10,4 @@ spring:
   cloud:
     config:
       label: develop
+      uri: http://config-server:8760  # 이거.. container끼리 접근하기 위해선 link 생성 후 URL에 명시해야 하는데... 좋은 방법이...
