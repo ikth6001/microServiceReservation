@@ -16,7 +16,7 @@ var express = require('express')
 var main= require('./routes/main');
 var config;
 var i18n= localeMgr.load();
-var config= configMgr.load('web-service', 'http://localhost:8760', process.env.NODE_ENV || 'dev', function(data) { config= data; });
+var config= configMgr.load('web-service', 'http://config-server:8760', process.env.NODE_ENV || 'dev', function(data) { config= data; });
 var app = express();
 
 //all environments
@@ -31,12 +31,12 @@ app.set('view engine', 'ejs');
  */
 var eurekaClient= new Eureka({
 	eureka: {
-		host: 'http://127.0.0.1:8761'
+		serviceUrl: ['http://eureka-server:8761']
 		, registerWithEureka: true
 	},
 	instance: {
 		app: 'web-service'
-		, ipAddr: '127.0.0.1'
+		, ipAddr: '192.168.99.100'
 		, port: app.get('port')
 	}
 });

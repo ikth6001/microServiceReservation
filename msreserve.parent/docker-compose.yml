@@ -52,3 +52,20 @@ services:
          && chmod +x /wait-for-it.sh
          && /wait-for-it.sh -t 0 eureka-server:8761
          && java -Dspring.profiles.active=dev -jar /app/msreserve.reservation-0.0.1-SNAPSHOT.jar"
+   web-server:
+      build:
+         context: ../msreserve.web.ui
+         dockerfile: ./Dockerfile
+      volumes:
+         - //c/docker/msreserve.web.ui:/app
+      ports: 
+         - "8764:8764"
+      environment:
+         - NODE_ENV=development
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 eureka-server:8761
+         && cd /app
+         && npm install
+         && node app.js"
