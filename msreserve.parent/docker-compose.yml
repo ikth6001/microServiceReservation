@@ -61,7 +61,9 @@ services:
       ports: 
          - "8764:8764"
       environment:
-         - NODE_ENV=development
+         - PORT=8764
+         - NODE_ENV=dev
+         - CONFIG_REQ_URL=http://config-server:8760
       command: >
          bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
          && chmod +x /wait-for-it.sh

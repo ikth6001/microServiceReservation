@@ -1,7 +1,3 @@
-
-/**
- * Module dependencies.
- */
 var express = require('express')
   , http = require('http')
   , path = require('path')
@@ -10,58 +6,57 @@ var express = require('express')
   , localeMgr= require('./lib/localeMgr')
   , configMgr= require('./lib/configMgr');
 
-/**
- * Module routes.
- */
 var main= require('./routes/main');
-var config;
-var i18n= localeMgr.load();
-var config= configMgr.load('web-service', 'http://config-server:8760', process.env.NODE_ENV || 'dev', function(data) { config= data; });
 var app = express();
+var i18n= localeMgr.load();
+var configReqUrl= process.env.CONFIG_REQ_URL || 'http://192.168.99.100:8760';
 
-//all environments
-app.set('port', process.env.PORT || 8764);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+configMgr.load('web-service'
+				, configReqUrl
+				, process.env.NODE_ENV || 'dev'
+				, bootstrap);
 
-/**
- * TODO 
- * 1. Spring-config server..
- * 2. 전체적으로 spring config server로부터 데이터를 받은 후에 서버 initializing이 되도록 리팩토링 필요.
- */
-var eurekaClient= new Eureka({
-	eureka: {
-		serviceUrl: ['http://eureka-server:8761']
-		, registerWithEureka: true
-	},
-	instance: {
-		app: 'web-service'
-		, ipAddr: '192.168.99.100'
-		, port: app.get('port')
-	}
-});
+function bootstrap(config) {
+	//all environments
+	const servPort= process.env.PORT || 8764
+	const eureka= config.get('eureka.client.service-url.defaultZone');
+	
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'ejs');
+	
+	var eurekaClient= new Eureka({
+		eureka: {
+			serviceUrl: [eureka]
+			, registerWithEureka: true
+		},
+		instance: {
+			app: 'web-service'
+			, ipAddr: '192.168.99.100' // TODO docker 환경.. ip 어떻게 구하지
+			, port: servPort
+		}
+	});
 
-app.configure(function() {
-	eurekaClient.start();
-	app.use(i18n.init);
-});
+	app.configure(function() {
+		eurekaClient.start();
+		app.use(i18n.init);
+	});
 
-app.use(cookieParser());
-app.use(i18n);
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());	// Get, Post 외의 메소드 사용시 설정 필요
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+	app.use(cookieParser());
+	app.use(i18n);
+	app.use(express.favicon());
+	app.use(express.logger('dev'));
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());	// Get, Post 외의 메소드 사용시 설정 필요
+	app.use(app.router);
+	app.use(express.static(path.join(__dirname, 'public')));
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+//	if ('dev' == app.get('env')) {
+//	  app.use(express.errorHandler());
+//	}
+
+	app.get('/', main);
+
+	http.createServer(app).listen(servPort, function(){
+	  console.log('Server listening on port ' + servPort);
+	});
 }
-
-app.get('/', main);
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Server listening on port ' + app.get('port'));
-});
