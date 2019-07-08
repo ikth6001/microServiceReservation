@@ -14,9 +14,13 @@ var configReqUrl= process.env.CONFIG_REQ_URL || 'http://192.168.99.100:8760';
 configMgr.load('web-service'
 				, configReqUrl
 				, process.env.NODE_ENV || 'dev'
+				, 'develop' // TODO
 				, bootstrap);
 
 function bootstrap(config) {
+	
+	console.log('loaded config [' + config + ']');
+	
 	//all environments
 	const servPort= process.env.PORT || 8764
 	const eureka= config.get('eureka.client.service-url.defaultZone');

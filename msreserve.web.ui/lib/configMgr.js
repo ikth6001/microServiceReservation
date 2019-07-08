@@ -3,7 +3,7 @@
  */
 var client= require('cloud-config-client');
 
-module.exports.load= function(name, url, profile, fn) {
+module.exports.load= function(name, url, profile, label, fn) {
 	
 	console.log('service name : ' + name);
 	console.log('conf req url : ' + url);
@@ -13,6 +13,7 @@ module.exports.load= function(name, url, profile, fn) {
 		.load({
 			name: name
 			, profiles: profile
-			, endpoint : url
+			, endpoint: url
+			, label: label
 		}).then(fn);
 };
