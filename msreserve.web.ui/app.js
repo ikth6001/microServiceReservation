@@ -4,22 +4,26 @@ var express = require('express')
   , cookieParser = require('cookie-parser')
   , Eureka= require('eureka-nodejs-client')
   , localeMgr= require('./lib/localeMgr')
-  , configMgr= require('./lib/configMgr');
+  , configMgr= require('./lib/configMgr')
+  , logger= require('./lib/loggerFactory').getLogger('app');
 
 var main= require('./routes/main');
 var app = express();
 var i18n= localeMgr.load();
 var configReqUrl= process.env.CONFIG_REQ_URL || 'http://192.168.99.100:8760';
 
+const profile= process.env.NODE_ENV || 'dev';
+
 configMgr.load('web-service'
 				, configReqUrl
-				, process.env.NODE_ENV || 'dev'
-				, 'develop' // TODO
+				, profile
+				, profile === 'dev' ? 'develop' : 'master'
 				, bootstrap);
 
 function bootstrap(config) {
 	
-	console.log('loaded config [' + config + ']');
+//	console.log('loaded config [' + config + ']');
+	logger.debug('loaded config [%s]', config);
 	
 	//all environments
 	const servPort= process.env.PORT || 8764
@@ -48,7 +52,7 @@ function bootstrap(config) {
 	app.use(cookieParser());
 	app.use(i18n);
 	app.use(express.favicon());
-	app.use(express.logger('dev'));
+	app.use(express.logger(profile));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());	// Get, Post 외의 메소드 사용시 설정 필요
 	app.use(app.router);
@@ -61,6 +65,7 @@ function bootstrap(config) {
 	app.get('/', main);
 
 	http.createServer(app).listen(servPort, function(){
-	  console.log('Server listening on port ' + servPort);
+//	  console.log('Server listening on port ' + servPort);
+		logger.debug('Server listening on port [%s]', servPort);
 	});
 }

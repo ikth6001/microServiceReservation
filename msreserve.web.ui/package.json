@@ -12,6 +12,7 @@
     "cookie-parser": "~1.4.3",
     "eureka-nodejs-client": "1.0.7",
     "cloud-config-client": "1.4.2",
-    "synchronize": "2.0.0"
+    "synchronize": "2.0.0",
+    "winston": "3.2.1"
   }
 }

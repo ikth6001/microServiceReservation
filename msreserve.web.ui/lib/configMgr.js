@@ -1,13 +1,14 @@
 /**
  * http://usejsdoc.org/
  */
-var client= require('cloud-config-client');
+var client= require('cloud-config-client')
+  , logger= require('./loggerFactory').getLogger('configMgr');
 
 module.exports.load= function(name, url, profile, label, fn) {
 	
-	console.log('service name : ' + name);
-	console.log('conf req url : ' + url);
-	console.log('curr profile : ' + profile);
+	logger.debug('service name : ' + name);
+	logger.debug('conf req url : ' + url);
+	logger.debug('curr profile : ' + profile);
 	
 	client
 		.load({
