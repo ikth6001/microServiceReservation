@@ -16,6 +16,9 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @Configuration
 public class CustomOAuth2ServerConfiguration extends OAuth2AuthorizationServerConfiguration {
 
+	/**
+	 * 타 어플리케이션에 API 제공할 목적이 아니므로..
+	 */
 	private final String CLIENT_ID= "foo";
 	private final String CLIENT_SECRET= "bar";
 	
