@@ -11,9 +11,11 @@ security:
     client:
       client-id: foo
       client-secret: bar
-    resource:
-      jwt:
-        key-value: com.ikth.apps
+  resource:
+    token-info-uri: http://auth-server:8763/oauth/check_token
+    jwt:
+      key-value: com.ikth.apps
+
   
 zuul:
   routes:
