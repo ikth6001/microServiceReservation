@@ -1,46 +1,37 @@
 package com.ikth.apps.msreserve.auth.config;
 
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.authserver.AuthorizationServerProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.client.BaseClientDetails;
-import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
-public class CustomOAuth2ServerConfiguration extends OAuth2AuthorizationServerConfiguration {
+public class CustomOAuth2ServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+	@Value("${security.oauth2.resource.jwt.key-value:com.ikth.apps}")
+	private String accessKey;
+	
 	/**
 	 * 타 어플리케이션에 API 제공할 목적이 아니므로..
 	 */
 	private final String CLIENT_ID= "foo";
-	private final String CLIENT_SECRET= "bar";
+	private final String CLIENT_SECRET= "{noop}bar";
 	
-	private @Autowired AccessTokenConverter accessTokenConverter;
+	@Autowired
+	private AuthenticationManager authenticationMangaer;
 	
-	public CustomOAuth2ServerConfiguration(BaseClientDetails details, AuthenticationConfiguration authenticationConfiguration,
-			ObjectProvider<TokenStore> tokenStore, ObjectProvider<AccessTokenConverter> tokenConverter,
-			AuthorizationServerProperties properties) throws Exception {
-		super(details, authenticationConfiguration, tokenStore, tokenConverter, properties);
-	}
-
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		super.configure(endpoints);
-		endpoints.accessTokenConverter(accessTokenConverter);
-	}
-	
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		super.configure(security);
-		security.checkTokenAccess("isAuthenticated()");
-		security.tokenKeyAccess("isAuthenticated()");
+		endpoints.accessTokenConverter(accessTokenConverter())
+				 .authenticationManager(authenticationMangaer);
 	}
 	
 	@Override
@@ -53,5 +44,17 @@ public class CustomOAuth2ServerConfiguration extends OAuth2AuthorizationServerCo
 		
 //		필요 없음
 //		clients.withClientDetails(new JdbcClientDetailsService(dataSource));
+	}
+	
+	@Bean
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(accessTokenConverter());
+	}
+	
+	@Bean
+	public JwtAccessTokenConverter accessTokenConverter() {
+		JwtAccessTokenConverter tokenConverter= new JwtAccessTokenConverter();
+		tokenConverter.setSigningKey(accessKey);
+		return tokenConverter;
 	}
 }
