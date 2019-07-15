@@ -29,7 +29,7 @@ public class OAuth2TokenTest {
     private String SECURITY_USERNAME = "user";
     private String SECURITY_PASSWORD = "user";
     
-  private MockMvc mockMvc;
+    private MockMvc mockMvc;
 	
 	@Autowired
 	private WebApplicationContext webCtxt;
@@ -73,7 +73,7 @@ public class OAuth2TokenTest {
     public void test() { }
 	
 //	@Test
-//	public void getAccessTokenReal() {
+//	public void getAccessToken() {
 //		
 //		RestTemplate restTemplate= new RestTemplate();
 //		final String url= "http://192.168.99.100:8763/oauth/token?grant_type=password&client_id=" + CLIENT_ID + "&username=" + SECURITY_USERNAME + "&password=" + SECURITY_PASSWORD + "&scope=" + SCOPE;
