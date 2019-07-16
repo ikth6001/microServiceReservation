@@ -50,7 +50,6 @@ public class CustomOAuth2ServerConfiguration extends AuthorizationServerConfigur
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		super.configure(security);
-		security.checkTokenAccess("permitAll()");
 	}
 	
 	@Bean
