@@ -75,7 +75,7 @@ public class AuthenticatedRequestTest {
 	@Test
 	public void authReqFailMock() throws Exception {
 		
-		mockMvc.perform(post("/api/reserve/api/test/param")
+		mockMvc.perform(post("/api/reservation/api/test/param")
 		       .with(httpBasic(USER_ID, USER_PW))
 		       .accept("application/json;charset=UTF-8"))
 		       .andExpect(status().isUnauthorized());
@@ -103,7 +103,7 @@ public class AuthenticatedRequestTest {
 			throw new Exception("token is empty");
 		}
 		
-		mockMvc.perform(post("/api/reserve/api/test/param")
+		mockMvc.perform(post("/api/reservation/api/test/param")
 			   .header("Authorization", "Bearer " + token)
 			   .accept("application/json;charset=UTF-8"))
 			   .andExpect(status().isNotFound()); // spring config 정보 못가져와서 URI 매핑 실패함. TODO profile 활용

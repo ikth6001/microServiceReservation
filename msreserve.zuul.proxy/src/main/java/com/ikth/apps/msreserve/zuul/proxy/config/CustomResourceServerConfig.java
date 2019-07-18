@@ -16,12 +16,19 @@ public class CustomResourceServerConfig extends ResourceServerConfigurerAdapter 
 	@Value("${security.oauth2.resource.jwt.key-value:com.ikth.apps}")
 	private String accessKey;
 	
+	@Value("${security.uris.authenticated:/api/reservation/**,/web/reservation**}")
+	private String[] authenticatedUri;
+	
+	@Value("${security.uris.permitAll:/**}")
+	private String[] permitAllUri;
+	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		
-//		http.authorizeRequests()
-//			.anyRequest().permitAll();
-		super.configure(http);
+		http
+			.authorizeRequests()
+			.antMatchers(authenticatedUri).authenticated()
+			.antMatchers(permitAllUri).permitAll();
 	}
 	
 	@Override
