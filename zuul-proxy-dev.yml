@@ -15,9 +15,12 @@ security:
       token-info-uri: http://auth-server:8763/oauth/check_token
       jwt:
         key-value: com.ikth.apps
+  uris:
+    authenticated: /api/reservation/**, /web/reservation/**
+    permitAll: /**
   
 zuul:
   routes:
-    reservation-service: /api/reserve/**
+    reservation-service: /api/reservation/**
     authorization-service: /api/auth/**
     web-service: /web/**
