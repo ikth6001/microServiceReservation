@@ -71,3 +71,13 @@ services:
          && cd /app
          && npm install
          && node app.js"
+   dev-service:
+      image: docker4w/nsenter-dockerd # you want to put there some small image
+      command: sh -c "START"
+      depends_on:
+         - config-server
+         - eureka-server
+#        - zuul-proxy
+         - auth-server
+         - reservation-server
+         - web-server
