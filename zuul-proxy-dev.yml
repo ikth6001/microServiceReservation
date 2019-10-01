@@ -1,7 +1,7 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://192.168.99.100:8761/eureka/
 
 server:
   port: 8080
@@ -12,7 +12,7 @@ security:
       client-id: foo
       client-secret: bar
     resource:
-      token-info-uri: http://auth-server:8763/oauth/check_token
+      token-info-uri: http://192.168.99.100:8763/oauth/check_token
       jwt:
         key-value: com.ikth.apps
   uris:
