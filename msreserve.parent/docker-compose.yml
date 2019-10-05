@@ -77,7 +77,7 @@ services:
       depends_on:
          - config-server
          - eureka-server
-#        - zuul-proxy
+         - zuul-proxy
          - auth-server
          - reservation-server
-         - web-server
+#        - web-server

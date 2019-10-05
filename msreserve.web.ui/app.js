@@ -5,20 +5,25 @@ var express = require('express')
   , Eureka= require('eureka-nodejs-client')
   , localeMgr= require('./lib/localeMgr')
   , configMgr= require('./lib/configMgr')
-  , logger= require('./lib/loggerFactory').getLogger('app');
+  , logger= require('./lib/loggerFactory').getLogger('app')
+  , ipMgr= require('./lib/ipMgr');
 
 var main= require('./routes/main');
 var app = express();
 var i18n= localeMgr.load();
 var configReqUrl= process.env.CONFIG_REQ_URL || 'http://192.168.99.100:8760';
+var ipAddr;
 
 const profile= process.env.NODE_ENV || 'dev';
 
-configMgr.load('web-service'
-				, configReqUrl
-				, profile
-				, profile === 'dev' ? 'develop' : 'master'
-				, bootstrap);
+ipMgr.getIp(function(data) {
+	ipAddr= data.toString();
+	configMgr.load('web-service'
+			, configReqUrl
+			, profile
+			, profile === 'dev' ? 'develop' : 'master'
+			, bootstrap);
+});
 
 function bootstrap(config) {
 	
@@ -28,6 +33,8 @@ function bootstrap(config) {
 	//all environments
 	const servPort= process.env.PORT || 8764
 	const eureka= config.get('eureka.client.service-url.defaultZone');
+//	console.log('My public ip address [' + publicIp + ']');
+	logger.debug('My public ip address [%s]', ipAddr);
 	
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs');
@@ -39,7 +46,7 @@ function bootstrap(config) {
 		},
 		instance: {
 			app: 'web-service'
-			, ipAddr: '192.168.99.100' // TODO docker 환경.. ip 어떻게 구하지
+			, ipAddr: ipAddr
 			, port: servPort
 		}
 	});
