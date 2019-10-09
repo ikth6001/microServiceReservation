@@ -13,7 +13,7 @@ function initInternal() {
 function initAreaGnb() {
 	var btnToMain= document.getElementById('areaBtnToMain');
 	btnToMain.addEventListener('click', function() {
-		window.location.href= '/';
+		window.location.href= '/web';
 	});
 }
 
@@ -21,7 +21,7 @@ function addPromotions() {
 	var element= document.getElementById('areaPromotion');
 	var htmlTemplate= document.querySelector('#promotionTemplate').innerHTML;
 	
-	sendGetAjaxRequest('/api/promotions', function() {
+	sendGetAjaxRequest('/api/reservation/promotions', function() {
 		if (this.status == 200) {
 			var txt = this.responseText;
 			var promotioned= JSON.parse(txt).items;
@@ -82,7 +82,7 @@ var size= 4;
 var selectedCd;
 
 function configureCategory() {
-	sendGetAjaxRequest('/api/categories', function() {
+	sendGetAjaxRequest('/api/reservation/categories', function() {
 		if(this.status == 200) {
 			var response= this.responseText;
 			var categories= JSON.parse(response).items;
@@ -134,7 +134,7 @@ function addCategoryEvent() {
 			selectedCd= code;
 			
 			var qs= 'categoryId=' + code +'&start=0';
-			sendGetAjaxRequest('/api/products?' + qs, function() {
+			sendGetAjaxRequest('/api/reservation/products?' + qs, function() {
 				if(this.status == 200) {
 					var response= this.responseText;
 					var products= JSON.parse(response);
@@ -205,7 +205,7 @@ function addMoreBtnEvent() {
 		var qs= 'categoryId=' + selectedCd + "&start=" + size;
 		
 		/* 다음 건이 있는지 확인하기 위해 1건 더 조회한다 */
-		sendGetAjaxRequest('/api/products?' + qs, function() {
+		sendGetAjaxRequest('/api/reservation/products?' + qs, function() {
 			var response= this.responseText;
 			var products= JSON.parse(response);
 			var items= products.items;

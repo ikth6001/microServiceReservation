@@ -2,13 +2,13 @@
 <html>
 <head>
 	<title><%= __('title.site') %></title>
-	<link rel='stylesheet' href='/stylesheets/main.css' />
+	<link rel='stylesheet' href='/web/stylesheets/main.css' />
 </head>
 <body>
 	<div id="container" style="border: solid 1px gray;">
 		<div id="areaGnb">
 			<div id="areaBtnToMain" style="display: inline-block;  cursor: pointer;">
-				<img src="image/mainLog.png" align="middle" style="margin: 5px;"> <%= __('logo.main') %>
+				<img src="/web/image/mainLog.png" align="middle" style="margin: 5px;"> <%= __('logo.main') %>
 			</div>
 			<div id="areaBtnReservInfo" style="display: inline-block; float: right; margin: 5px;">
 				<div style="display: inline-block;">
@@ -41,7 +41,7 @@
 	
 	<script id="promotionTemplate" type="text/template">
 		<div class="promotionItem" style="position: relative; display: inline;">
-			<img src="{{path}}" width="600" height="200">
+			<img src="/web/{{path}}" width="600" height="200">
 		</div>
 	</script>
 	
@@ -52,7 +52,7 @@
 	</script>
 	
 	<script id="productTemplate" type="text/template">
-		<img src="{{path}}" height="350" width="280"><br>
+		<img src="/web/{{path}}" height="350" width="280"><br>
 		<b>{{name}}</b><br>
 		{{place}}<br>
 		{{description}}
@@ -62,7 +62,7 @@
 		<spring:message code="label.product.count"/>
 	</script>
 	
-	<script type='text/javascript' src='lib/handlebars-v4.1.0.js'></script>
-	<script type="text/javascript" src="javascript/main.js"></script>
+	<script type='text/javascript' src='/web/lib/handlebars-v4.1.0.js'></script>
+	<script type="text/javascript" src="/web/javascript/main.js"></script>
 </body>
 </html>
