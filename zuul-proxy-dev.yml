@@ -21,6 +21,11 @@ security:
   
 zuul:
   routes:
-    reservation-service: /api/reservation/**, /api/common/**
+    reservation-auth-api:
+      path: /api/reservation/**
+      serviceId: reservation-service
+    reservation-anonymouse-api:
+      path: /api/common/**
+      serviceId: reservation-service
     authorization-service: /api/auth/**
     web-service: /web/**
