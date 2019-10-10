@@ -1,10 +1,30 @@
 package com.ikth.apps.msreserve.reservation.configuration;
 
+import javax.sql.DataSource;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 @Configuration
 public class DataAccessObjectConfiguration 
 {
+	@Bean
+	public DataSource getEmbeddedDataSource()
+	{
+		EmbeddedDatabaseBuilder builder= new EmbeddedDatabaseBuilder();
+		EmbeddedDatabase db= builder
+								.setType(EmbeddedDatabaseType.H2)
+								.setName("reservationDB;DATABASE_TO_UPPER=false;MODE=MYSQL")
+								.addScript("classpath:sqls/reservation_ddl.sql")
+								.addScript("classpath:sqls/reservation_dml.sql")
+								.build();
+		
+		return db;
+	}
+	
 /**	
 	@Bean
 	public SqlSessionFactory getSqlSessionFactory(DataSource dataSource)
@@ -57,21 +77,6 @@ public class DataAccessObjectConfiguration
 		return loadJdbcDataSource();
 	}
 	
-	@Bean("h2DataSource")
-	@Profile("DEVELOP")
-	public DataSource getEmbeddedDataSource()
-	{
-		EmbeddedDatabaseBuilder builder= new EmbeddedDatabaseBuilder();
-		EmbeddedDatabase db= builder
-								.setType(EmbeddedDatabaseType.H2)
-								.setName("reservationDB;DATABASE_TO_UPPER=false;MODE=MYSQL")
-								.addScript("classpath:sqls/reservation_ddl.sql")
-								.addScript("classpath:sqls/reservation_dml.sql")
-								.build();
-		
-		return db;
-	}
-
 	private DataSource loadJdbcDataSource() {
 		BasicDataSource dataSource= new BasicDataSource();
 		dataSource.setDriverClassName(driver);

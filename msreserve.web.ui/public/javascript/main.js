@@ -21,7 +21,7 @@ function addPromotions() {
 	var element= document.getElementById('areaPromotion');
 	var htmlTemplate= document.querySelector('#promotionTemplate').innerHTML;
 	
-	sendGetAjaxRequest('/api/reservation/promotions', function() {
+	sendGetAjaxRequest('/api/common/promotions', function() {
 		if (this.status == 200) {
 			var txt = this.responseText;
 			var promotioned= JSON.parse(txt).items;
@@ -82,7 +82,7 @@ var size= 4;
 var selectedCd;
 
 function configureCategory() {
-	sendGetAjaxRequest('/api/reservation/categories', function() {
+	sendGetAjaxRequest('/api/common/categories', function() {
 		if(this.status == 200) {
 			var response= this.responseText;
 			var categories= JSON.parse(response).items;
@@ -134,7 +134,7 @@ function addCategoryEvent() {
 			selectedCd= code;
 			
 			var qs= 'categoryId=' + code +'&start=0';
-			sendGetAjaxRequest('/api/reservation/products?' + qs, function() {
+			sendGetAjaxRequest('/api/common/products?' + qs, function() {
 				if(this.status == 200) {
 					var response= this.responseText;
 					var products= JSON.parse(response);
