@@ -1155,6 +1155,7 @@ insert into reservation_user_comment_image(id, reservation_info_id, reservation_
 
 insert into reservation_user(user_id, user_enc_pw) values ('user01@naver.com', 'user01');
 
+commit;
 
 --
 -- select * from category;

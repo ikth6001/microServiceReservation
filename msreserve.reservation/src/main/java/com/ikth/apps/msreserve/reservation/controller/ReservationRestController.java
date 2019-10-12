@@ -1,9 +1,13 @@
 package com.ikth.apps.msreserve.reservation.controller;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ikth.apps.msreserve.reservation.dto.Product;
 import com.ikth.apps.msreserve.reservation.dto.ProductResponse;
+import com.ikth.apps.msreserve.reservation.entity.FileInfo;
+import com.ikth.apps.msreserve.reservation.repository.FileInfoRepository;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -114,6 +120,14 @@ public class ReservationRestController {
 //    	ProductResponse responseBody= reservationSc.getProducts(categoryId, start);
 //    	return new ResponseEntity<ProductResponse>(responseBody, HttpStatus.OK);
 //    }
+    
+    @Autowired
+    private FileInfoRepository fileInfoRepository;
+    private Function<FileInfo, Product> fncToProduct= (fi) -> {
+    	Product product= new Product();
+    	product.setProductImageUrl("image/" + fi.getFileName());
+    	return product;
+    };
 
     @ApiOperation(value = "프로모션 목록 구하기", nickname = "getPromotionsUsingGET", notes = "[PJT-3]", response = ProductResponse.class, tags={ "프로모션 API", })
     @ApiResponses(value = { 
@@ -125,17 +139,12 @@ public class ReservationRestController {
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     public ResponseEntity<ProductResponse> getPromotionsUsingGET() {
+    	List<FileInfo> imgs= fileInfoRepository.findAll();
     	ProductResponse responseBody= new ProductResponse();
-    	responseBody.setTotalCount(1);
-    	Product product= new Product();
-    	product.setDisplayInfoId(001);
-    	product.setPlaceName("예술의전당");
-    	product.setProductContent("재미있는명탐정코난");
-    	product.setProductDescription("추리물, 스릴러");
-    	product.setProductId(002);
-    	product.setProductImageUrl("/image/mainLog.png");
     	responseBody.setItems(new ArrayList<Product>());
-    	responseBody.getItems().add(product);
+    	responseBody.getItems().addAll(imgs.stream()
+        								   .map(fncToProduct)
+        								   .collect(Collectors.toList()));
     	return new ResponseEntity<ProductResponse>(responseBody, HttpStatus.OK);
     }
 
