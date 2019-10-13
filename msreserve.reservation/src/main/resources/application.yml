@@ -1,0 +1,11 @@
+---
+spring.profiles: unit
+server:
+  port: 8762
+spring:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none

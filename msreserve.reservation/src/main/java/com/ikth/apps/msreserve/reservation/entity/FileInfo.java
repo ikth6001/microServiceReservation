@@ -8,17 +8,11 @@ public class FileInfo {
 
 	@Id
 	private long id;
-	
 	private String fileName;
-	
 	private String saveFileName;
-	
 	private String contentType;
-	
 	private boolean deleteFlag;
-	
 	private String createDate;
-	
 	private String modifyDate;
 	
 	public long getId() {
