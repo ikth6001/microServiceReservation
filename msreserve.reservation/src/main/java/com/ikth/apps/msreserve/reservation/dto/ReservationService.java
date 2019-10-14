@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ikth.apps.msreserve.reservation.entity.FileInfo;
 import com.ikth.apps.msreserve.reservation.entity.Promotion;
+import com.ikth.apps.msreserve.reservation.repository.CategoryRepository;
 import com.ikth.apps.msreserve.reservation.repository.PromotionRepository;
 
 @Service
@@ -21,6 +22,9 @@ public class ReservationService {
 	
 	@Autowired
 	private PromotionRepository promotionRepo;
+	
+	@Autowired
+	private CategoryRepository categoryRepo;
 	
 	private Function<com.ikth.apps.msreserve.reservation.entity.Product, Product> fncProductAdapt= (p) -> {
 		Product product= new Product();
@@ -34,10 +38,14 @@ public class ReservationService {
 	};
 	
 	public List<Product> getPromotionList() {
-		List<Promotion> promotions= promotionRepo.findAll();
+		List<Promotion> promotions= this.promotionRepo.findAll();
 		return promotions.stream()
 						 .map(Promotion::getProduct)
-						 .map(fncProductAdapt)
+						 .map(this.fncProductAdapt)
 						 .collect(Collectors.toList());
+	}
+	
+	public List<Category> getCategories() {
+		return this.categoryRepo.findAll();
 	}
 }
