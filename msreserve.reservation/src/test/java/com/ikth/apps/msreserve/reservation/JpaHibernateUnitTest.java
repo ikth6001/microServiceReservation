@@ -30,7 +30,6 @@ public class JpaHibernateUnitTest {
 		List<Promotion> promotions= promotionRepository.findAll();
 		logger.debug("promotion count [{}]", promotions.size());
 		for(Promotion promotion : promotions) {
-			logger.debug("promotion id [{}], promotion product id [{}]", promotion.getId(), promotion.getProductId());
 			logger.debug("product id [{}]", promotion.getProduct() == null ? "null" : promotion.getProduct().getId());
 		}
 		assertEquals(true, promotions.size() > 0);

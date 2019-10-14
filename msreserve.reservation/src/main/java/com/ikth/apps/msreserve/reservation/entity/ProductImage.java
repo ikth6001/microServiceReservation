@@ -2,6 +2,8 @@ package com.ikth.apps.msreserve.reservation.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity(name="PRODUCT_IMAGE")
 public class ProductImage {
@@ -10,7 +12,9 @@ public class ProductImage {
 	private long id;
 	private long productId;
 	private String type;
-	private long fileId;
+	@OneToOne
+	@JoinColumn(name="fileId", referencedColumnName="id")
+	private FileInfo fileInfo;
 	
 	public long getId() {
 		return id;
@@ -30,10 +34,10 @@ public class ProductImage {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public long getFileId() {
-		return fileId;
+	public FileInfo getFileInfo() {
+		return fileInfo;
 	}
-	public void setFileId(long fileId) {
-		this.fileId = fileId;
+	public void setFileInfo(FileInfo fileInfo) {
+		this.fileInfo = fileInfo;
 	}
 }

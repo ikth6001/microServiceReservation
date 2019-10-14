@@ -1,9 +1,6 @@
 package com.ikth.apps.msreserve.reservation.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ikth.apps.msreserve.reservation.dto.Product;
 import com.ikth.apps.msreserve.reservation.dto.ProductResponse;
-import com.ikth.apps.msreserve.reservation.entity.FileInfo;
-import com.ikth.apps.msreserve.reservation.repository.FileInfoRepository;
+import com.ikth.apps.msreserve.reservation.dto.ReservationService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,7 +26,11 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class ReservationRestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReservationRestController.class);
+    @SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(ReservationRestController.class);
+    
+    @Autowired
+    private ReservationService reservationService;
     
 //    @Autowired
 //    private IReservationSc reservationSc;
@@ -121,13 +121,6 @@ public class ReservationRestController {
 //    	return new ResponseEntity<ProductResponse>(responseBody, HttpStatus.OK);
 //    }
     
-    @Autowired
-    private FileInfoRepository fileInfoRepository;
-    private Function<FileInfo, Product> fncToProduct= (fi) -> {
-    	Product product= new Product();
-    	product.setProductImageUrl("image/" + fi.getFileName());
-    	return product;
-    };
 
     @ApiOperation(value = "프로모션 목록 구하기", nickname = "getPromotionsUsingGET", notes = "[PJT-3]", response = ProductResponse.class, tags={ "프로모션 API", })
     @ApiResponses(value = { 
@@ -139,12 +132,10 @@ public class ReservationRestController {
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     public ResponseEntity<ProductResponse> getPromotionsUsingGET() {
-    	List<FileInfo> imgs= fileInfoRepository.findAll();
     	ProductResponse responseBody= new ProductResponse();
-    	responseBody.setItems(new ArrayList<Product>());
-    	responseBody.getItems().addAll(imgs.stream()
-        								   .map(fncToProduct)
-        								   .collect(Collectors.toList()));
+    	List<Product> products= reservationService.getPromotionList();
+    	responseBody.setItems(products);
+    	responseBody.setTotalCount(products.size());
     	return new ResponseEntity<ProductResponse>(responseBody, HttpStatus.OK);
     }
 

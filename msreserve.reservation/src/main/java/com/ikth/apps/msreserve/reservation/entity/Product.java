@@ -21,7 +21,7 @@ public class Product {
 	private String modifyDate;
 	
 	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name="productId")
+	@JoinColumn(name="productId", referencedColumnName="id")
 	private List<ProductImage> productImage;
 
 	public long getId() {
