@@ -20,7 +20,7 @@
 		<div id="areaPromotion" style="vertical-align: top; height: 200px; width: 600px; overflow: hidden;"></div>
 		<div id="areaCategory">
 			<div class="categoryBtn" categoryId="0" style="display: inline-block; margin-left: 20px; margin-right: 20px; font-weight: bold; cursor: pointer;">
-				<spring:message code="category.all"/>
+				<%= __('category.all') %>
 			</div>
 		</div>
 		<div id="areaCount" style="text-align: center; margin-bottom: 15px;">
@@ -31,7 +31,7 @@
 			<div class="areaProduct" id="productRight"></div>
 		</div>
 		<div id="areaBtnMore" style="text-align: center;">
-			<spring:message code="btn.more"/>
+			<%= __('btn.more') %>
 		</div>
 		<div id="areaBtnToTop" style="text-align: center;">
 			^ TOP
@@ -59,7 +59,7 @@
 	</script>
 	
 	<script id="label.product.count" type="text/message">
-		<spring:message code="label.product.count"/>
+		<%= __('products.count.message') %>
 	</script>
 	
 	<script type='text/javascript' src='/web/lib/handlebars-v4.1.0.js'></script>

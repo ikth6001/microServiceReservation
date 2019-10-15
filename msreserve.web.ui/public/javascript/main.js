@@ -205,7 +205,7 @@ function addMoreBtnEvent() {
 		var qs= 'categoryId=' + selectedCd + "&start=" + size;
 		
 		/* 다음 건이 있는지 확인하기 위해 1건 더 조회한다 */
-		sendGetAjaxRequest('/api/reservation/products?' + qs, function() {
+		sendGetAjaxRequest('/api/common/products?' + qs, function() {
 			var response= this.responseText;
 			var products= JSON.parse(response);
 			var items= products.items;

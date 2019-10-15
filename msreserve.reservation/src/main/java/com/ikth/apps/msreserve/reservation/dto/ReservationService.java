@@ -3,15 +3,18 @@ package com.ikth.apps.msreserve.reservation.dto;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.ikth.apps.msreserve.reservation.entity.FileInfo;
 import com.ikth.apps.msreserve.reservation.entity.Promotion;
 import com.ikth.apps.msreserve.reservation.repository.CategoryRepository;
+import com.ikth.apps.msreserve.reservation.repository.ProductRepository;
 import com.ikth.apps.msreserve.reservation.repository.PromotionRepository;
 
 @Service
@@ -25,6 +28,9 @@ public class ReservationService {
 	
 	@Autowired
 	private CategoryRepository categoryRepo;
+	
+	@Autowired
+	private ProductRepository productRepo;
 	
 	private Function<com.ikth.apps.msreserve.reservation.entity.Product, Product> fncProductAdapt= (p) -> {
 		Product product= new Product();
@@ -47,5 +53,21 @@ public class ReservationService {
 	
 	public List<Category> getCategories() {
 		return this.categoryRepo.findAll();
+	}
+	
+	private final int PAGE_SIZE= 4;
+	
+	public List<Product> getProducts(int categoryId, int start) {
+		PageRequest pageRequest= PageRequest.of(start / PAGE_SIZE, PAGE_SIZE);
+		
+		Iterable<com.ikth.apps.msreserve.reservation.entity.Product> products= null;
+		if(categoryId == 0) {
+			products= productRepo.findAll(pageRequest);
+		} else {
+			products= productRepo.findAllByCategory(categoryId, pageRequest);
+		}
+		return StreamSupport.stream(products.spliterator(), false)
+							.map(fncProductAdapt)
+							.collect(Collectors.toList());
 	}
 }

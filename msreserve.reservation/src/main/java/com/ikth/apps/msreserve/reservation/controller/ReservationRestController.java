@@ -110,7 +110,7 @@ public class ReservationRestController {
         @ApiResponse(code = 401, message = "Unauthorized"),
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Not Found") })
-    @RequestMapping(value = "/api/products",
+    @RequestMapping(value = "/products",
         produces = { "application/json" },  
         method = RequestMethod.GET)
     public ResponseEntity<ProductResponse> getProductsUsingGET(
@@ -119,11 +119,14 @@ public class ReservationRestController {
     		@RequestParam(value = "categoryId", required = false) 
     		Integer categoryId
     		, @ApiParam(value = "시작 위치", defaultValue = "0") 
-    		@Min(value=0, message= "시작 값은 0보다 커야 합니다.") 
+    		@Min(value=0, message= "시작 값은 0보다 크거나 같아야 합니다.") 
     		@RequestParam(value = "start", required = false, defaultValue="0") 
     		Integer start) {
     	logger.debug("requested parameter category id [{}], start [{}]", categoryId, start);
-    	ProductResponse responseBody= null;//reservationSc.getProducts(categoryId, start);
+    	List<Product> products= reservationService.getProducts(categoryId, start);
+    	ProductResponse responseBody= new ProductResponse();
+    	responseBody.setItems(products);
+    	responseBody.setTotalCount(products.size());
     	return new ResponseEntity<ProductResponse>(responseBody, HttpStatus.OK);
     }
     
