@@ -20,6 +20,9 @@ security:
     permitAll: /**
   
 zuul:
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 10000
   routes:
     reservation-auth-api:
       path: /api/reservation/**
