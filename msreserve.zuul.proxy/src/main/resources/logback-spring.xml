@@ -19,9 +19,11 @@
         	</rollingPolicy>
         	
         	<encoder>
-        		<pattern>[%-5level][%d{MM-dd hh:mm:ss}][%c{20}][%L] : %message%n</pattern>
+        		<pattern>[%-5level][%d{MM-dd hh:mm:ss}][%c{20}][%L] : %message%n</pattern>z
         	</encoder>
         </appender>
+        
+        <logger name="org.apache.http.wire" level="ERROR"/>
 
         <root level="DEBUG">
         	<appender-ref ref="CONSOLE"/>

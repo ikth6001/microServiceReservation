@@ -12,8 +12,12 @@
 			</div>
 			<div id="areaBtnReservInfo" style="display: inline-block; float: right; margin: 5px;">
 				<div style="display: inline-block;">
-					<a href= "/reservationList"><c:out value="${userName}"/></a>
-					<a href= "<c:out value="${loginReqUrl}"/>"><c:out value="${logInOut}"/></a> 
+<% if(locals.user) { %>
+	<a href="/reservationList"><%= locals.user %></a>
+	<a href="/logout">Logout</a>
+<% } else { %>
+	<a href="/login">Login</a>
+<% } %>
 				</div>
 			</div>
 		</div>
