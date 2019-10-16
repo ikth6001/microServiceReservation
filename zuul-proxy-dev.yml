@@ -32,3 +32,8 @@ zuul:
       serviceId: reservation-service
     authorization-service: /api/auth/**
     web-service: /web/**
+    
+execution:
+  isolation:
+    thread:
+      timeoutInMilliseconds: 10000
