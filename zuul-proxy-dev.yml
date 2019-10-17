@@ -20,8 +20,6 @@ security:
     permitAll: /**
   
 zuul:
-  ReadTimeout: 10000
-  ConnectTimeout: 10000
   routes:
     reservation-auth-api:
       path: /api/reservation/**
@@ -32,7 +30,6 @@ zuul:
     authorization-service: /api/auth/**
     web-service: /web/**
     
-execution:
-  isolation:
-    thread:
-      timeoutInMilliseconds: 10000
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
