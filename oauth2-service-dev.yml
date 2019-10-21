@@ -1,13 +1,6 @@
 server:
   port: 8763
 
-# TODO : UserDetails, User Service implementation  
-spring:
-  security:
-    user:
-      name: user@gmail.com
-      password: user
-      
 # security:
 #   oauth2:
 #     authorization:
