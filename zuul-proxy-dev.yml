@@ -27,7 +27,7 @@ zuul:
     reservation-anonymouse-api:
       path: /api/common/**
       serviceId: reservation-service
-    authorization-service: /api/auth/**
+    oauth2-service: /api/auth/**
     web-service: /web/**
     
 ribbon:
