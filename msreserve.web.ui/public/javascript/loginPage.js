@@ -49,8 +49,8 @@ function init() {
 				printErrMsg('서버 에러 발생..');
 			}
 		});
-		req.open("POST", '/api/auth/oauth/token?grant_type=password&username=' + id + '&password=' + pw + '&scope=read', true, 'fool', 'bar');
-//		req.setRequestHeader("Authorization", "Basic " + btoa("foo:bar"));
+		req.open("POST", '/api/auth/oauth/token?grant_type=password&username=' + id + '&password=' + pw + '&scope=read', true);
+		req.setRequestHeader("Authorization", "Basic " + btoa("foo:bar"));
 		req.send();
 	});
 }

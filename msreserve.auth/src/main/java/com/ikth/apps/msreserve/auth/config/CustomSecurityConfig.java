@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,7 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 		 * TODO jdbc base service details
 		 */
 		auth.inMemoryAuthentication()
-			.withUser("user")
+			.withUser("user@gmail.com")
 			.password("{noop}user")
 			.roles("USER");
 	}
@@ -40,6 +41,9 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.anyRequest().permitAll()
 			.and()
-			.cors();
+			.authorizeRequests()
+			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+			.and()
+			.cors().and();
 	}
 }
