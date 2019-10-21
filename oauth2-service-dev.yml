@@ -1,12 +1,6 @@
 server:
   port: 8763
 
-# security:
-#   oauth2:
-#     authorization:
-#       check-token-access: isAuthenticated()
-#       token-key-access: isAuthenticated()
-      
 eureka:
   client:
     service-url:
@@ -19,10 +13,3 @@ security:
     resource:
       jwt:
         key-value: com.ikth.apps
-
-# server:
-#   tomcat:
-#     accesslog:
-#       pattern: %{yyyy-MM-dd HH:mm:ss}t\t%s\t%r\t%{User-Agent}i\t%{Referer}i\t%a\t%b   
-#       enabled: true
-#     basedir: .
