@@ -14,9 +14,9 @@
 				<div style="display: inline-block;">
 <% if(locals.user) { %>
 	<a href="/reservationList"><%= locals.user %></a>
-	<a href="/logout">Logout</a>
+	<a href="/api/reservation/logout">Logout</a>
 <% } else { %>
-	<a href="/login">Login</a>
+	<a href="/web/loginPage">Login</a>
 <% } %>
 				</div>
 			</div>

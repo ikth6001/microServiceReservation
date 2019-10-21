@@ -9,7 +9,7 @@ var express= require('express')
   , ipMgr= require('./lib/ipMgr')
   , session= require('express-session');
 
-var main= require('./routes/main');
+var pageRoute= require('./routes/pageRoute');
 var app = express();
 var i18n= localeMgr.load();
 var configReqUrl= process.env.CONFIG_REQ_URL || 'http://192.168.99.100:8760';
@@ -69,7 +69,8 @@ function bootstrap(config) {
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
 
-	app.get('/', main);
+	app.get('/', pageRoute.route('main'));
+	app.get('/loginPage', pageRoute.route('loginPage'));
 
 	http.createServer(app).listen(servPort, function(){
 		logger.debug('Server listening on port [%s]', servPort);
