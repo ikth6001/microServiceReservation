@@ -38,17 +38,19 @@ function init() {
 				
 				if(res.success) {
 					areaMsg.innerHTML= '';
-//					localStorage.setItem('token', res.token);
-					document.cookie='Bearer=' + res.token;
-					window.history.back();
+					document.cookie='Bearer=' + res.access_token;
+					window.history.back();	
 				} else {
 					printErrMsg(res.failMsg);
 				}
+			} else if(this.status == 401) {
+				printErrMsg('존재하지 않는 아이디이거나 암호가 틀렸습니다.')
 			} else {
 				printErrMsg('서버 에러 발생..');
 			}
 		});
-		req.open("GET", '/api/auth/login?id=' + id + '&passwd=' + pw, true);
+		req.open("POST", '/api/auth/oauth/token?grant_type=password&username=' + id + '&password=' + pw + '&scope=read', true, 'fool', 'bar');
+//		req.setRequestHeader("Authorization", "Basic " + btoa("foo:bar"));
 		req.send();
 	});
 }

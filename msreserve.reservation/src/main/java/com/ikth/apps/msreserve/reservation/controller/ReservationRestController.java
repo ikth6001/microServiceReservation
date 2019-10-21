@@ -32,7 +32,6 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class ReservationRestController {
 
-    @SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ReservationRestController.class);
     
     @Autowired
