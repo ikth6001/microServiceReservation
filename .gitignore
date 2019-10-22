@@ -1,3 +1,4 @@
 **/target/
 msreserve.web.ui/node_modules/
 msreserve.web.ui/logs/
+./settings/
