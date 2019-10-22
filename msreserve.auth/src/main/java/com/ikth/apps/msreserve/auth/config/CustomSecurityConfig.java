@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 @EnableWebSecurity
@@ -40,10 +39,25 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.anyRequest().permitAll()
-			.and()
-			.authorizeRequests()
-			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-			.and()
-			.cors().and();
+			.and();
+//			.authorizeRequests()
+//			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+//			.and()
+//			.cors()
+//			.and()
+//			.httpBasic();
 	}
+	
+//	@Bean
+//	public CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
+//		configuration.addAllowedOrigin("*");
+//		configuration.addAllowedMethod("*");
+//		configuration.addAllowedHeader("*");
+//		configuration.setAllowCredentials(true);
+//		configuration.setMaxAge(3600L);
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", configuration);
+//		return source;
+//	}
 }

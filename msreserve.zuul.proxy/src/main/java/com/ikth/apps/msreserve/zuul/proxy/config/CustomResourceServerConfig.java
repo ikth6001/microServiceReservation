@@ -24,11 +24,25 @@ public class CustomResourceServerConfig extends ResourceServerConfigurerAdapter 
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		
 		http.authorizeRequests()
 			.antMatchers(authenticatedUri).authenticated()
-			.antMatchers(permitAllUri).permitAll();
+			.antMatchers(permitAllUri).permitAll()
+			.and();
+//			.cors();
 	}
+	
+//	@Bean
+//	public CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
+//		configuration.addAllowedOrigin("*");
+//		configuration.addAllowedMethod("*");
+//		configuration.addAllowedHeader("*");
+//		configuration.setAllowCredentials(true);
+//		configuration.setMaxAge(3600L);
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", configuration);
+//		return source;
+//	}
 	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
