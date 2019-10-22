@@ -24,11 +24,19 @@ zuul:
     reservation-auth-api:
       path: /api/reservation/**
       serviceId: reservation-service
+      sensitiveHeaders:
     reservation-anonymouse-api:
       path: /api/common/**
       serviceId: reservation-service
-    oauth2-service: /api/auth/**
-    web-service: /web/**
+      sensitiveHeaders:
+    oauth2-service:
+      path: /api/auth/**
+      serviceId: oauth2-service
+      sensitiveHeaders:
+    web-service:
+      path: /web/**
+      serviceId: web-service
+      sensitiveHeaders:
     
 ribbon:
   ReadTimeout: 10000
