@@ -37,7 +37,8 @@ function init() {
 				var res= JSON.parse(txt);
 				
 				areaMsg.innerHTML= '';
-				document.cookie='Bearer=' + res.access_token;
+//				document.cookie='Bearer=' + res.access_token;
+				document.cookie='Bearer=' + res.access_token + '; path=/;';
 				window.history.back();	
 			} else if(this.status == 401) {
 				printErrMsg('존재하지 않는 아이디이거나 암호가 틀렸습니다.')

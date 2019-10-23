@@ -14,9 +14,9 @@
 				<div style="display: inline-block;">
 <% if(locals.user) { %>
 	<a href="/reservationList"><%= locals.user %></a>
-	<a href="/api/reservation/logout">Logout</a>
+	<a style="cursor:pointer" onClick="fncLogout()">로그아웃</a>
 <% } else { %>
-	<a href="/web/loginPage">Login</a>
+	<a href="/web/loginPage">로그인</a>
 <% } %>
 				</div>
 			</div>
@@ -68,5 +68,39 @@
 	
 	<script type='text/javascript' src='/web/lib/handlebars-v4.1.0.js'></script>
 	<script type="text/javascript" src="/web/javascript/main.js"></script>
+	
+	<script>
+		function fncLogout() {
+			var req= new XMLHttpRequest();
+			req.addEventListener('load', function() {
+				if(this.status == 200) {
+					eraseCookieFromAllPaths('Bearer');
+					window.location.href= '/web';
+				} else if(this.status == 401) {
+					window.location.href= '/web/loginPage';
+				}
+			});
+			req.open('GET', '/api/auth/logout', true);
+			req.withCredentials= true;
+			req.send();
+		}
+		
+		function eraseCookieFromAllPaths(name) {
+		    // This function will attempt to remove a cookie from all paths.
+		    var pathBits = location.pathname.split('/');
+		    var pathCurrent = ' path=';
+		
+		    // do a simple pathless delete first.
+		    document.cookie= name + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
+		
+		    for (var i = 0; i < pathBits.length; i++) {
+		        pathCurrent += ((pathCurrent.substr(-1) != '/') ? '/' : '') + pathBits[i];
+		        document.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT;' + pathCurrent + ';';
+		    }
+		}
+	</script>
+	
+	
+	
 </body>
 </html>
