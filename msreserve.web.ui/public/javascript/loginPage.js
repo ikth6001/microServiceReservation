@@ -36,13 +36,9 @@ function init() {
 				var txt= this.responseText;
 				var res= JSON.parse(txt);
 				
-				if(res.success) {
-					areaMsg.innerHTML= '';
-					document.cookie='Bearer=' + res.access_token;
-					window.history.back();	
-				} else {
-					printErrMsg(res.failMsg);
-				}
+				areaMsg.innerHTML= '';
+				document.cookie='Bearer=' + res.access_token;
+				window.history.back();	
 			} else if(this.status == 401) {
 				printErrMsg('존재하지 않는 아이디이거나 암호가 틀렸습니다.')
 			} else {

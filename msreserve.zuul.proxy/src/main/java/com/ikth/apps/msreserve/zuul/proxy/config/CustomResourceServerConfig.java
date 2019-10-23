@@ -9,6 +9,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+
+import com.ikth.apps.msreserve.zuul.proxy.customs.CookieBaseBearerTokenExtractor;
+import com.ikth.apps.msreserve.zuul.proxy.filter.TokenUserCustmoHeaderRegistFilter;
 
 @Configuration
 public class CustomResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -27,8 +31,9 @@ public class CustomResourceServerConfig extends ResourceServerConfigurerAdapter 
 		http.authorizeRequests()
 			.antMatchers(authenticatedUri).authenticated()
 			.antMatchers(permitAllUri).permitAll()
-			.and();
+			.and()
 //			.cors();
+			.addFilterAfter(new TokenUserCustmoHeaderRegistFilter(), AbstractPreAuthenticatedProcessingFilter.class);
 	}
 	
 //	@Bean
@@ -46,7 +51,8 @@ public class CustomResourceServerConfig extends ResourceServerConfigurerAdapter 
 	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.tokenStore(tokenStore());
+		resources.tokenStore(tokenStore())
+				 .tokenExtractor(new CookieBaseBearerTokenExtractor());
 	}
 
 	@Bean

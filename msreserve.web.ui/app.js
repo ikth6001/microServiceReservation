@@ -61,11 +61,13 @@ function bootstrap(config) {
 	app.use(express.logger(profile));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());	// Get, Post 외의 메소드 사용시 설정 필요
-//	TODO JWT 읽은 후 유저 이름 얻기
-//	app.use(function(req, res, next) {
-//		res.locals.user= 'ikth6001@gmail.com';
-//		next();
-//	});
+	app.use(function(req, res, next) {
+		var username= req.headers['cust-username'];
+		if(username) {
+			res.locals.user= username;
+		}
+		next();
+	});
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
 
