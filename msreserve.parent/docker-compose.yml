@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+   config-server:
+      image: msreserve.config
+      ports:
+         - "8760:8760"
+      volumes:
+         - //c/docker/msreserve.config/target:/app
+      command: java -Dspring.profiles.active=dev -jar /app/msreserve.config-0.0.1-SNAPSHOT.jar
+   eureka-server:
+      image: msreserve.eureka
+      ports:
+         - "8761:8761"
+      volumes:
+         - //c/docker/msreserve.eureka/target:/app
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 config-server:8760
+         && java -Dspring.profiles.active=dev -jar /app/msreserve.eureka-0.0.1-SNAPSHOT.jar"
+   zuul-proxy:
+      image: msreserve.zuul.proxy
+      ports:
+         - "8080:8080"
+      volumes:
+         - //c/docker/msreserve.zuul.proxy/target:/app
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 eureka-server:8761
+         && java -Dspring.profiles.active=dev -jar /app/msreserve.zuul.proxy-0.0.1-SNAPSHOT.jar"
+   auth-server:
+      image: msreserve.auth
+      ports:
+         - "8763:8763"
+      volumes:
+         - //c/docker/msreserve.auth/target:/app
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 eureka-server:8761
+         && java -Dspring.profiles.active=dev -jar /app/msreserve.auth-0.0.1-SNAPSHOT.jar"
+   reservation-server:
+      image: msreserve.reservation
+      ports:
+         - "8762:8762"
+      volumes:
+         - //c/docker/msreserve.reservation/target:/app
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 eureka-server:8761
+         && java -Dspring.profiles.active=dev -jar /app/msreserve.reservation-0.0.1-SNAPSHOT.jar"
+   web-server:
+      build:
+         context: ../msreserve.web.ui
+         dockerfile: ./Dockerfile
+      volumes:
+         - //c/docker/msreserve.web.ui:/app
+      ports: 
+         - "8764:8764"
+      environment:
+         - PORT=8764
+         - NODE_ENV=dev
+         - CONFIG_REQ_URL=http://config-server:8760
+      command: >
+         bash -c "wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+         && chmod +x /wait-for-it.sh
+         && /wait-for-it.sh -t 0 eureka-server:8761
+         && cd /app
+         && npm install
+         && node app.js"
+   dev-service:
+      image: docker4w/nsenter-dockerd # you want to put there some small image
+      command: sh -c "START"
+      depends_on:
+         - config-server
+         - eureka-server
+         - zuul-proxy
+         - auth-server
+         - reservation-server
+         - web-server

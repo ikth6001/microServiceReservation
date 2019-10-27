@@ -1,11 +1,15 @@
-# TODO spring config server / programmatically config
-
 spring:
   application:
     name: reservation-service
   cloud:
     config:
       uri: http://localhost:8760
-    
-server:
-  port: 8762
+---
+spring.profiles: dev
+spring:
+  cloud:
+    config:
+      label: develop
+      uri: http://192.168.99.100:8760  # docker-machine ip
+---
+spring.profiles: unit

@@ -1,4 +1,7 @@
 {
-	"title.site": "Reservation service",
-	"logo.main": "Reservation"
+	"title.site": "Reservation service"
+	, "logo.main": "Reservation"
+	, "category.all": "All"
+	, "products.count.message": "There are {0} products able to reserve"
+	, "btn.more": "More"
 }

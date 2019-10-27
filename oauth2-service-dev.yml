@@ -1,0 +1,15 @@
+server:
+  port: 8763
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.99.100:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: com.ikth.apps

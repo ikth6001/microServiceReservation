@@ -1,0 +1,839 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  description: Boost-course Full-Stack Web Developer public Api
+  title: Boost-course Full-Stack Web Developer public Api
+  termsOfService: 'https://www.edwith.org'
+host: 211.249.62.123
+basePath: /
+tags:
+  - name: 상품 API
+    description: '상품 API (상품 목록 구하기, 상품 전시 정보 구하기)'
+  - name: 예약 API
+    description: '예약 API (예약정보조회, 예약하기, 예약취소하기, 한줄평등록)'
+  - name: 카테고리 API
+    description: 카테고리 API (카테고리 목록 구하기)
+  - name: 프로모션 API
+    description: 프로모션 API (프로모션 목록 구하기)
+paths:
+  /api/categories:
+    get:
+      tags:
+        - 카테고리 API
+      summary: 카테고리 목록 구하기
+      description: '[PJT-3]'
+      operationId: getCategoriesUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CategoryResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /api/products:
+    get:
+      tags:
+        - 상품 API
+      summary: 상품 목록 구하기
+      description: '[PJT-3]'
+      operationId: getProductsUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: categoryId
+          in: query
+          description: 카테고리 아이디
+          required: false
+          type: integer
+          format: int32
+          allowEmptyValue: false
+        - name: start
+          in: query
+          description: 시작 위치
+          required: false
+          type: integer
+          default: 0
+          format: int32
+          allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  '/api/products/{displayInfoId}':
+    get:
+      tags:
+        - 상품 API
+      summary: 상품 전시 정보 구하기
+      description: '[PJT-4 & 6] PJT 4 에서 개발과 테스트를 완료 (한줄평 등록 없는 상태), PJT 6 에서 한줄평 등록한 내용까지 잘 나오나 테스트'
+      operationId: getProductDisplayInfoUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: displayInfoId
+          in: path
+          description: displayInfoId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DisplayInfoResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /api/promotions:
+    get:
+      tags:
+        - 프로모션 API
+      summary: 프로모션 목록 구하기
+      description: '[PJT-3]'
+      operationId: getPromotionsUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /api/reservations:
+    get:
+      tags:
+        - 예약 API
+      summary: 예약정보 조회
+      description: '[PJT-5]'
+      operationId: getReservationsUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: reservationEmail
+          in: query
+          description: reservationEmail
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ReservationInfoResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    post:
+      tags:
+        - 예약 API
+      summary: 예약하기
+      description: '[PJT-5] 예약하기는 실제 DB 에 적용된 값이 아닌, Random 으로 생성된 예약 객체를 반환한다.'
+      operationId: reserveProductUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: reservationParam
+          description: reservationParam
+          required: true
+          schema:
+            $ref: '#/definitions/ReservationParam'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ReservationResponse'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  '/api/reservations/{reservationId}':
+    put:
+      tags:
+        - 예약 API
+      summary: 예약취소하기
+      description: '[PJT-5] 예약취소하기는 실제 DB 에 적용된 값이 아닌, Random 으로 생성된 예약 객체를 반환한다.'
+      operationId: cancelReservationUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: reservationId
+          in: path
+          description: reservationId
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ReservationResponse'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  '/api/reservations/{reservationInfoId}/comments':
+    post:
+      tags:
+        - 예약 API
+      summary: 한줄평 (Comment) 등록
+      description: '[PJT-6] 한중평 등록은 실제 DB 에 적용된 값이 아닌, Random 으로 생성된 Comment 객체를 반환한다.'
+      operationId: createReservationCommentUsingPOST
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: attachedImage
+          in: formData
+          description: attachedImage
+          required: false
+          type: file
+        - name: comment
+          in: query
+          description: comment
+          required: true
+          type: string
+        - name: productId
+          in: query
+          description: productId
+          required: true
+          type: integer
+          format: int32
+        - name: reservationInfoId
+          in: path
+          description: reservationInfoId
+          required: true
+          type: integer
+          format: int32
+        - name: score
+          in: query
+          description: score
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CommentResponse'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+definitions:
+  Category:
+    type: object
+    properties:
+      count:
+        type: integer
+        format: int32
+        description: Category 에 속한 전시상품 수
+      id:
+        type: integer
+        format: int32
+        description: Category Id
+      name:
+        type: string
+        description: Category Name
+    title: Category
+    description: Category 모델
+  CategoryResponse:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Category'
+    title: CategoryResponse
+    description: items field 에 Category 들을 담는다
+  Comment:
+    type: object
+    properties:
+      comment:
+        type: string
+        description: 상품평
+      commentId:
+        type: integer
+        format: int32
+        description: 상품평 Id
+      commentImages:
+        type: array
+        description: 상품평 이미지들
+        items:
+          $ref: '#/definitions/CommentImage'
+      createDate:
+        type: string
+        format: date-time
+        description: 생성일
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      reservationDate:
+        type: string
+        format: date-time
+        description: 예약일
+      reservationEmail:
+        type: string
+        description: 예약자 이메일
+      reservationInfoId:
+        type: integer
+        format: int32
+        description: 예약 Id
+      reservationName:
+        type: string
+        description: 예약자 명
+      reservationTelephone:
+        type: string
+        description: 예약자 전화번호
+      score:
+        type: number
+        format: double
+        description: 평점
+    title: Comment
+    description: 상품평
+  CommentImage:
+    type: object
+    properties:
+      contentType:
+        type: string
+        description: 파일 확장자
+      createDate:
+        type: string
+        format: date-time
+        description: 생성일
+      deleteFlag:
+        type: boolean
+        description: 삭제 여부
+      fileId:
+        type: integer
+        format: int32
+        description: 파일 id
+      fileName:
+        type: string
+        description: 파일 이름
+      imageId:
+        type: integer
+        format: int32
+        description: 이미지 Id
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      reservationInfoId:
+        type: integer
+        format: int32
+        description: 예약 Id
+      reservationUserCommentId:
+        type: integer
+        format: int32
+        description: 예약자 상품평 Id
+      saveFileName:
+        type: string
+        description: 파일 저장 위치 이름
+    title: CommentImage
+    description: 상품평 이미지
+  CommentResponse:
+    type: object
+    properties:
+      comment:
+        type: string
+        description: 평
+      commentId:
+        type: integer
+        format: int32
+        description: 한줄평 Id
+      commentImage:
+        description: 한줄평 첨부 이미지
+        $ref: '#/definitions/CommentImage'
+      createDate:
+        type: string
+        format: date-time
+        description: 등록일
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      reservationInfoId:
+        type: integer
+        format: int32
+        description: 예약정보 Id
+      score:
+        type: integer
+        format: int32
+        description: 별점
+    title: CommentResponse
+    description: 한줄평 등록 response 모델
+  DisplayInfo:
+    type: object
+    properties:
+      categoryId:
+        type: integer
+        format: int32
+        description: 카테고리 (category) Id
+      categoryName:
+        type: string
+        description: 카테고리 이름
+      createDate:
+        type: string
+        format: date-time
+        description: 생성일
+      displayInfoId:
+        type: integer
+        format: int32
+        description: 전시 (display_info) Id
+      email:
+        type: string
+        description: 이메일
+      homepage:
+        type: string
+        description: 홈페이지
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      openingHours:
+        type: string
+        description: 전시 시간
+      placeLot:
+        type: string
+        description: 전시 번지명
+      placeName:
+        type: string
+        description: 전시장
+      placeStreet:
+        type: string
+        description: 전시 도로명
+      productContent:
+        type: string
+        description: 상품 내용
+      productDescription:
+        type: string
+        description: 상품 설명
+      productEvent:
+        type: string
+        description: 상품 이벤트
+      productId:
+        type: integer
+        format: int32
+        description: 상품 (product) Id
+      telephone:
+        type: string
+        description: 전화번호
+    title: DisplayInfo
+    description: 상품 전시 (Display) 모델
+  DisplayInfoImage:
+    type: object
+    properties:
+      contentType:
+        type: string
+        description: 파일 확장자
+      createDate:
+        type: string
+        format: date-time
+        description: 생성일
+      deleteFlag:
+        type: boolean
+        description: 삭제 여부
+      displayInfoId:
+        type: integer
+        format: int32
+        description: 전시 Id
+      displayInfoImageId:
+        type: integer
+        format: int32
+        description: 전시 이미지 Id
+      fileId:
+        type: integer
+        format: int32
+        description: 파일 id
+      fileName:
+        type: string
+        description: 파일 이름
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      saveFileName:
+        type: string
+        description: 파일 저장 위치 이름
+    title: DisplayInfoImage
+    description: 전시 이미지
+  DisplayInfoResponse:
+    type: object
+    properties:
+      averageScore:
+        type: number
+        format: double
+      comments:
+        type: array
+        items:
+          $ref: '#/definitions/Comment'
+      displayInfo:
+        $ref: '#/definitions/DisplayInfo'
+      displayInfoImage:
+        $ref: '#/definitions/DisplayInfoImage'
+      productImages:
+        type: array
+        items:
+          $ref: '#/definitions/ProductImage'
+      productPrices:
+        type: array
+        items:
+          $ref: '#/definitions/ProductPrice'
+    title: DisplayInfoResponse
+  InputStream:
+    type: object
+    title: InputStream
+  Product:
+    type: object
+    properties:
+      displayInfoId:
+        type: integer
+        format: int32
+        description: 전시 (display_info) Id
+      placeName:
+        type: string
+        description: 전시 장소 명
+      productContent:
+        type: string
+        description: 상품 상세 설명
+      productDescription:
+        type: string
+        description: 상품 설명
+      productId:
+        type: integer
+        format: int32
+        description: 상품 (product) Id
+      productImageUrl:
+        type: string
+        description: 상품 썸네일 이미지 URL
+    title: Product
+    description: 상품 (Product) 모델
+  ProductImage:
+    type: object
+    properties:
+      contentType:
+        type: string
+        description: 파일 확장자
+      createDate:
+        type: string
+        format: date-time
+        description: 생성일
+      deleteFlag:
+        type: boolean
+        description: 삭제 여부
+      fileInfoId:
+        type: integer
+        format: int32
+        description: 파일 Id
+      fileName:
+        type: string
+        description: 파일 이름
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      productImageId:
+        type: integer
+        format: int32
+        description: 상품 이미지 Id
+      saveFileName:
+        type: string
+        description: 파일 저장 위치 이름
+      type:
+        type: string
+        description: '이미지 타입 (main, thumbnail, etc)'
+        enum:
+          - ma
+          - th
+          - et
+    title: ProductImage
+    description: 상품 이미지 모델
+  ProductPrice:
+    type: object
+    properties:
+      createDate:
+        type: string
+        format: date-time
+        description: 생성일
+      discountRate:
+        type: number
+        format: double
+        description: 할인율
+      modifyDate:
+        type: string
+        format: date-time
+        description: 수정일
+      price:
+        type: integer
+        format: int32
+        description: 가격
+      priceTypeName:
+        type: string
+        description: 가격 타입명
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      productPriceId:
+        type: integer
+        format: int32
+        description: 상품 가격 Id
+    title: ProductPrice
+    description: 상품 가격
+  ProductResponse:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Product'
+      totalCount:
+        type: integer
+        format: int32
+    title: ProductResponse
+    description: items field 에 전시상품 (Product) 들을 담는다. totalCount 는 카테고리에 해당하는 전체 상품 수이다.
+  Promotion:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: 프로모션 (promotion) Id
+      productId:
+        type: integer
+        format: int32
+        description: 상품 (product) Id
+      productImageUrl:
+        type: string
+        description: 상품 썸네일 이미지 URL
+    title: Promotion
+    description: 프로모션 (promotion) 모델
+  PromotionResponse:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Promotion'
+    title: PromotionResponse
+    description: items field 에 Promotion 들을 담는다
+  ReservationInfo:
+    type: object
+    properties:
+      cancelYn:
+        type: boolean
+        description: 예약 취소 여부
+      createDate:
+        type: string
+        format: date-time
+        description: 예약 생성일시
+      displayInfo:
+        description: 전시상품 정보
+        $ref: '#/definitions/DisplayInfo'
+      displayInfoId:
+        type: integer
+        format: int32
+        description: 전시상품 Id
+      modifyDate:
+        type: string
+        format: date-time
+        description: 예약 수정일시
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      reservationDate:
+        type: string
+        format: date
+        description: 예약일
+      reservationEmail:
+        type: string
+        description: 예약자 이메일
+      reservationInfoId:
+        type: integer
+        format: int32
+        description: 예약 Id
+      reservationName:
+        type: string
+        description: 예약자명
+      reservationTelephone:
+        type: string
+        description: 예약자 전화번호
+      totalPrice:
+        type: integer
+        format: int64
+        description: 예약한 상품 총 가격
+    title: ReservationInfo
+    description: 예약정보 모델
+  ReservationInfoResponse:
+    type: object
+    properties:
+      reservations:
+        type: array
+        description: 예약 정보들
+        items:
+          $ref: '#/definitions/ReservationInfo'
+      size:
+        type: integer
+        format: int32
+        description: 예약 수
+    title: ReservationInfoResponse
+    description: 예약조회 Response 모델
+  ReservationParam:
+    type: object
+    properties:
+      displayInfoId:
+        type: integer
+        format: int32
+        description: 전시상품 Id
+      prices:
+        type: array
+        description: 예약 가격 정보
+        items:
+          $ref: '#/definitions/ReservationPrice'
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      reservationEmail:
+        type: string
+        description: 예약자 이메일
+      reservationName:
+        type: string
+        description: 예약자명
+      reservationTelephone:
+        type: string
+        description: 예약자 전화번호
+      reservationYearMonthDay:
+        type: string
+        description: 예약일
+    title: ReservationParam
+    description: 예약하기 Request Body 모델
+  ReservationPrice:
+    type: object
+    properties:
+      count:
+        type: integer
+        format: int32
+        description: 예약 상품 수
+      productPriceId:
+        type: integer
+        format: int32
+        description: 상품 가격 Id
+      reservationInfoId:
+        type: integer
+        format: int32
+        description: 예약 Id
+      reservationInfoPriceId:
+        type: integer
+        format: int32
+        description: 예약 가격 Id
+    title: ReservationPrice
+    description: 예약가격 내역
+  ReservationResponse:
+    type: object
+    properties:
+      cancelYn:
+        type: boolean
+        description: 취소여부
+      createDate:
+        type: string
+        format: date-time
+        description: 예약 생성일시
+      displayInfoId:
+        type: integer
+        format: int32
+        description: 전시상품 Id
+      modifyDate:
+        type: string
+        format: date-time
+        description: 예약 수정일시
+      prices:
+        type: array
+        description: 예약 가격 정보
+        items:
+          $ref: '#/definitions/ReservationPrice'
+      productId:
+        type: integer
+        format: int32
+        description: 상품 Id
+      reservationDate:
+        type: string
+        format: date
+        description: 예약일
+      reservationEmail:
+        type: string
+        description: 예약자 이메일
+      reservationInfoId:
+        type: integer
+        format: int32
+        description: 예약 Id
+      reservationName:
+        type: string
+        description: 예약자명
+      reservationTelephone:
+        type: string
+        description: 예약자 전화번호
+    title: ReservationResponse
+    description: 예약하기 Response 모델

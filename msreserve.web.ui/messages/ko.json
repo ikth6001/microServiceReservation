@@ -1,4 +1,7 @@
 {
-	"title.site": "예약 서비스"
-	, "logo.main": "예약"
+	"title.site": "예약 서비스",
+	"logo.main": "예약",
+	"category.all": "전체",
+	"products.count.message": "예약 가능한 공연이 {0}개 있습니다.",
+	"btn.more": "더 보기"
 }

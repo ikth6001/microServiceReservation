@@ -1,0 +1,43 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.99.100:8761/eureka/
+
+server:
+  port: 8080
+
+security:
+  oauth2:
+    client:
+      client-id: foo
+      client-secret: bar
+    resource:
+      token-info-uri: http://192.168.99.100:8763/oauth/check_token
+      jwt:
+        key-value: com.ikth.apps
+  uris:
+    authenticated: /api/reservation/**, /web/reservation/**
+    permitAll: /**
+  
+zuul:
+  routes:
+    reservation-auth-api:
+      path: /api/reservation/**
+      serviceId: reservation-service
+      sensitiveHeaders:
+    reservation-anonymouse-api:
+      path: /api/common/**
+      serviceId: reservation-service
+      sensitiveHeaders:
+    oauth2-service:
+      path: /api/auth/**
+      serviceId: oauth2-service
+      sensitiveHeaders:
+    web-service:
+      path: /web/**
+      serviceId: web-service
+      sensitiveHeaders:
+    
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000

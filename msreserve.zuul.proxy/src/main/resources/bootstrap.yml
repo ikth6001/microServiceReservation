@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: zuul-proxy
+  cloud:
+    config:
+      uri: http://localhost:8760
+---
+spring.profiles: dev
+spring:
+  cloud:
+    config:
+      label: develop
+      uri: http://192.168.99.100:8760  # docker-machine ip
